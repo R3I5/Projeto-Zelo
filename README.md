@@ -18,18 +18,18 @@ Diferente de sistemas de automação simples, este projeto exige:
 ## 🛠️ Tecnologias Utilizadas
 * **Hardware:** ESP32 (Dual-Core).
 * **Firmware:** Framework Arduino / FreeRTOS.
-* **Back-end:** [PHP / Laravel / Python - Escolha o seu].
-* **Front-end:** [React + Tailwind / HTML / Outro].
+* **Back-end:** C++.
+* **Front-end:** HTML e CSS.
 * **Protocolos:** HTTP / MQTT.
 
 ## 🔌 Componentes de Hardware
 | Componente | Função |
 | :--- | :--- |
 | **ESP32** | Microcontrolador central com Wi-Fi/Bluetooth integrados. |
-| **DS3231 (RTC)** | [cite_start]Sensor de Tempo Real para precisão cronométrica. |
-| **Display OLED** | [cite_start]Interface visual para horários e dosagens. |
-| **DFPlayer Mini** | [cite_start]Módulo de áudio para alertas sonoros e voz. |
-| **Push-Buttons** | [cite_start]Interação do usuário (Confirmar, Soneca e Emergência). |
+| **DS3231 (RTC)** | Sensor de Tempo Real para precisão cronométrica. |
+| **Display OLED** | Interface visual para horários e dosagens. |
+| **DFPlayer Mini** | Módulo de áudio para alertas sonoros e voz. |
+| **Push-Buttons** | Interação do usuário (Confirmar, Soneca e Emergência). |
 
 
 
