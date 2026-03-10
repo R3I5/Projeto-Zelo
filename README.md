@@ -44,7 +44,7 @@ Diferente de sistemas de automação simples, este projeto exige:
 * Desgaste da memória Flash por escritas excessivas de logs.
 
 ## 👥 Integrantes
-* **[Nome do Integrante 1]** 
+* **Giovanna Paulin Lebedieff dos Santos** 
 * **João Victor dos Reis** 
 * **[Nome do Integrante 3]**
   
