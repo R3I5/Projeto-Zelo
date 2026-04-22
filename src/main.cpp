@@ -1,23 +1,27 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <SPI.h>
+#include <math.h>
 
 #include "config/pins.h"
 #include "drivers/rtc_manager.h"
 #include "drivers/dht_sensor.h"
 #include "drivers/gc9a01_display.h"
 #include "services/display_service.h"
+#include "services/web_service.h"
 
 // Arquivo principal do projeto.
-// Responsável por inicializar RTC, DHT e display GC9A01,
-// exibindo hora e temperatura na tela.
+// Responsável por inicializar RTC, DHT, display GC9A01 e interface web,
+// exibindo hora e temperatura na tela física e no navegador.
 
 RTCManager rtcManager;
 DHTSensor dhtSensor(DHT_PIN, DHT_TYPE);
 GC9A01Display tft(TFT_CS, TFT_DC, TFT_RST);
 DisplayService displayService;
+WebService webService;
 
-void setup() {
+void setup()
+{
     Serial.begin(115200);
     delay(1000);
 
@@ -39,15 +43,20 @@ void setup() {
 
     dhtSensor.begin();
 
-    if (!rtcManager.begin()) {
+    if (!rtcManager.begin())
+    {
         Serial.println("Erro: RTC nao encontrado.");
-    } else {
+    }
+    else
+    {
         Serial.println("RTC inicializado com sucesso.");
     }
 
-    if (!tft.begin(TFT_ROTATION, 4000000)) {
+    if (!tft.begin(TFT_ROTATION, 4000000))
+    {
         Serial.println("Erro: display GC9A01 nao inicializado.");
-        while (true) {
+        while (true)
+        {
             delay(1000);
         }
     }
@@ -56,28 +65,43 @@ void setup() {
     tft.drawCenteredTitle("Projeto Zelo", GC9A01A_CYAN);
     tft.showText(35, 120, "Inicializando...", GC9A01A_WHITE, 2);
 
+    webService.beginAccessPoint("Zelo-ESP32", "12345678");
+    webService.beginServer();
+
     Serial.println("Display inicializado com sucesso.");
+    Serial.print("Interface web disponivel em: ");
+    Serial.println(webService.getIP());
+
     delay(1500);
 }
 
-void loop() {
+void loop()
+{
     DateTime currentTime = rtcManager.now();
     float temperature = dhtSensor.readTemperature();
 
+    char timeBuffer[9];
+    snprintf(timeBuffer, sizeof(timeBuffer), "%02d:%02d:%02d",
+             currentTime.hour(), currentTime.minute(), currentTime.second());
+
+    String currentTimeStr = String(timeBuffer);
+
     Serial.print("Hora: ");
-    if (currentTime.hour() < 10) Serial.print("0");
-    Serial.print(currentTime.hour());
-    Serial.print(":");
-    if (currentTime.minute() < 10) Serial.print("0");
-    Serial.print(currentTime.minute());
-    Serial.print(":");
-    if (currentTime.second() < 10) Serial.print("0");
-    Serial.println(currentTime.second());
+    Serial.println(currentTimeStr);
 
     Serial.print("Temperatura: ");
     Serial.println(temperature);
 
     displayService.renderMainScreen(tft, currentTime, temperature);
+
+    webService.updateData(
+        currentTimeStr,
+        temperature,
+        true,
+        !isnan(temperature),
+        true);
+
+    webService.handleClient();
 
     delay(1000);
 }

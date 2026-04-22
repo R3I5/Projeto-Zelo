@@ -1,4 +1,0 @@
-Arquivos Header (.h) em C/C++ são arquivos utilizados para declarar funções, classes, macros
-e variaveis globais para serem compartilhadas através de múltiplas fontes (.c / .cpp ) arquivos.
-Eles facilitam a reutilização de código, melhoram a organização e permitem compilação separada.
-Eles utilizam #include para incluir e incluem diretivas guardads como #pragma once para prevenir erros.
